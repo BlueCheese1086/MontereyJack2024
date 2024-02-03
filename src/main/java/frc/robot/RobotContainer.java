@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -76,6 +75,6 @@ public class RobotContainer {
 
   /** Passes the teleop command to the {@link Robot} class. */
   public Command getTeleopCommand() {
-    return new ArcadeDrive(drivetrain, () -> -joystick.getRawAxis(1), () -> -joystick.getRawAxis(2));
+    return new ArcadeDrive(drivetrain, () -> joystick.getRawAxis(1), () -> joystick.getRawAxis(2));
   }
 }

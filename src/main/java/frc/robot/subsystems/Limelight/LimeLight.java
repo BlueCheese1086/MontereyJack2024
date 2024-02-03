@@ -4,4 +4,8 @@ import org.photonvision.PhotonCamera;
 
 public class LimeLight {
     PhotonCamera mainCam = new PhotonCamera("MontyMain");
+
+    public LimeLight() {
+        
+    }
 }

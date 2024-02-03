@@ -8,7 +8,8 @@ package frc.robot.subsystems.Tower;
 // import com.ctre.phoenix6.hardware.TalonFX;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.PneumaticHub;
@@ -32,10 +33,8 @@ public class Tower {
         hood = hub.makeSolenoid(TowerConstants.SolenoidID);
 
         // Applying settings to each motor
-        // leftTopRoller.getConfigurator().apply(new TalonFXConfiguration());
-        // rightTopRoller.getConfigurator().apply(new TalonFXConfiguration());
-        leftTopRoller.configFactoryDefault();
-        rightTopRoller.configFactoryDefault();
+        leftTopRoller.getConfigurator().apply(new TalonFXConfiguration());
+        rightTopRoller.getConfigurator().apply(new TalonFXConfiguration());
         bottomRoller.configFactoryDefault();
 
         rightTopRoller.setInverted(true);
@@ -52,15 +51,15 @@ public class Tower {
         SmartDashboard.putNumber("Tower Speed", speed * 0.6);
         // leftTopRoller.set(speed * 0.6);
         // rightTopRoller.set(speed * 0.6);
-        leftTopRoller.set(ControlMode.PercentOutput, speed * 0.6);
-        rightTopRoller.set(ControlMode.PercentOutput, speed * 0.6);
+        leftTopRoller.set(speed * 0.6);
+        rightTopRoller.set(speed * 0.6);
         bottomRoller.set(ControlMode.PercentOutput, speed * 0.6);
     }
 
     /** Returns the average speed of the motors.  Doesn't use encoders, so very unreliable. */
     public double getSpeed() {
         // return (bottomRoller.getMotorOutputPercent() + leftTopRoller.get()) / 2;
-        return (bottomRoller.getMotorOutputPercent() + leftTopRoller.getMotorOutputPercent()) / 2;
+        return (bottomRoller.getMotorOutputPercent() + leftTopRoller.get()) / 2;
     }
 
     /** Sets the state of the hood. true is closed, false is open. */

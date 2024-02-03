@@ -20,15 +20,31 @@ public class Drivetrain extends SubsystemBase {
     public Drivetrain() {
         // Applying settings to each motor
         // Creates a list of motors to easily manipulate settings.
-        CANSparkMax[] motors = {frontLeft, frontRight, backLeft, backRight};
-        for (CANSparkMax motor : motors) {
-            motor.restoreFactoryDefaults();
-            motor.setIdleMode(IdleMode.kBrake);
-            motor.setSmartCurrentLimit(45);
-        }
-        
+        frontLeft.restoreFactoryDefaults();
+        frontLeft.setIdleMode(IdleMode.kBrake);
+        frontLeft.setSmartCurrentLimit(45);
+        frontLeft.setInverted(true);
+        frontLeft.burnFlash();
+
+        backLeft.restoreFactoryDefaults();
+        backLeft.setIdleMode(IdleMode.kBrake);
+        backLeft.setSmartCurrentLimit(45);
         backLeft.follow(frontLeft);
+        backLeft.setInverted(true);
+        backLeft.burnFlash();
+
+        frontRight.restoreFactoryDefaults();
+        frontRight.setIdleMode(IdleMode.kBrake);
+        frontRight.setSmartCurrentLimit(45);
+        frontRight.setInverted(false);
+        frontRight.burnFlash();
+
+        backRight.restoreFactoryDefaults();
+        backRight.setIdleMode(IdleMode.kBrake);
+        backRight.setSmartCurrentLimit(45);
         backRight.follow(frontRight);
+        backRight.setInverted(false);
+        backRight.burnFlash();
     }
 
     /** Drives the robot with the y axis of one joystick and the x axis of another.  Drives robots in a way similar to how most games are played. */
