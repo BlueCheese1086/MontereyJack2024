@@ -56,10 +56,10 @@ public class RobotContainer {
 
     // joystick.button(2).whileTrue(new RunTower(tower, 1));
 
-    joystick.button(3).toggleOnTrue(new SetIntakeState(intake, true)); // 
-    joystick.button(1).whileTrue(new RunIntake(intake, 1)); // 
-    joystick.button(4).toggleOnTrue(new SetHoodState(tower, true)); // 
-    joystick.button(2).whileTrue(new RunTower(tower, 1)); // 
+    joystick.button(2).toggleOnTrue(new SetIntakeState(intake, true)); // B
+    joystick.button(3).whileTrue(new RunIntake(intake, 1)); // X
+    joystick.button(4).toggleOnTrue(new SetHoodState(tower, true)); // Y
+    joystick.button(1).whileTrue(new RunTower(tower, 1)); // A
 
     // The exception to this method is the left bumper, as it runs all of the subsystems in reverse, and opens all of the solenoids.
     joystick.button(5).whileTrue(new SetIntakeState(intake, true)); // Left Bumper
@@ -75,6 +75,6 @@ public class RobotContainer {
 
   /** Passes the teleop command to the {@link Robot} class. */
   public Command getTeleopCommand() {
-    return new ArcadeDrive(drivetrain, () -> joystick.getRawAxis(1), () -> joystick.getRawAxis(2));
+    return new ArcadeDrive(drivetrain, () -> -joystick.getRawAxis(1), () -> joystick.getRawAxis(4));
   }
 }

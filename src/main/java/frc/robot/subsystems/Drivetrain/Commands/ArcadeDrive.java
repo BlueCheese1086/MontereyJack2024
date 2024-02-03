@@ -15,22 +15,22 @@ public class ArcadeDrive extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Drivetrain drivetrain;
   private final DoubleSupplier xSpeedSupplier;
-  private final DoubleSupplier zTurnSupplier;
+  private final DoubleSupplier zRotationSupplier;
 
   /**
    * Creates a new ArcadeDrive command.
    * This command uses the arcadeDrive function of the Drivetrain class to drive the robot in all sorts of directions.
    */
-  public ArcadeDrive(Drivetrain drivetrain, DoubleSupplier xSpeedSupplier, DoubleSupplier zTurnSupplier) {
+  public ArcadeDrive(Drivetrain drivetrain, DoubleSupplier xSpeedSupplier, DoubleSupplier zRotationSupplier) {
     this.drivetrain = drivetrain;
     this.xSpeedSupplier = xSpeedSupplier;
-    this.zTurnSupplier = zTurnSupplier;
+    this.zRotationSupplier = zRotationSupplier;
     addRequirements(drivetrain);
   }
 
   @Override
   /** Runs every cycle.  Contains the code that the command will execute. */
   public void execute() {
-    drivetrain.arcadeDrive(xSpeedSupplier.getAsDouble(), zTurnSupplier.getAsDouble());
+    drivetrain.arcadeDrive(xSpeedSupplier.getAsDouble(), zRotationSupplier.getAsDouble());
   }
 }
