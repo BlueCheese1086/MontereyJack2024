@@ -1,12 +1,5 @@
 package frc.robot.subsystems.Tower;
 
-
-// Some code in this file is commented out.
-// This code is from the CTRE Pheonix V6 API.
-// Before implementing this code, make sure that the talons are up to date.
-// Note that TalonSRX motors are not supported by the v6 api (yet)
-// import com.ctre.phoenix6.hardware.TalonFX;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -19,20 +12,26 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.TowerConstants;
 
 public class Tower {
-    // Initializes Pneumatics
-    Solenoid hood;
-
-    // Initializes Motors
+    // Initializing Motors
     TalonFX leftLaunchMotor = new TalonFX(TowerConstants.LeftLaunchRollerID);
     TalonFX rightLaunchMotor = new TalonFX(TowerConstants.RightLaunchRollerID);
     TalonSRX feedMotor = new TalonSRX(TowerConstants.FeedRollerID);
+
+    // Initializing Pneumatics
+    Solenoid hood;
     
-    /** Creates a new Tower subsystem */
+    /**
+     * Creates a new Tower subsystem.
+     * <p>
+     * This subsystem is in charge of controlling the motors and solenoids that are used to launch game objects.
+     * 
+     * @param hub The Pneumatics Hub connected to the robot.
+     */
     public Tower(PneumaticHub hub) {
-        // Creating the solenoid
+        // Creating the solenoid.
         hood = hub.makeSolenoid(TowerConstants.SolenoidID);
 
-        // Applying settings to each motor
+        // Restoring the factory defaults of each motor.
         leftLaunchMotor.getConfigurator().apply(new TalonFXConfiguration());
         rightLaunchMotor.getConfigurator().apply(new TalonFXConfiguration());
         feedMotor.configFactoryDefault();
@@ -40,10 +39,8 @@ public class Tower {
         // Making the right motor follow the left one.
         rightLaunchMotor.setControl(new Follower(leftLaunchMotor.getDeviceID(), true));
 
+        // Setting the initial state of the solenoid.
         hood.set(true);
-
-        // If the backup motor is in use, uncomment this.
-        //feedMotor.setInverted(true);
     }
 
     /**
@@ -85,7 +82,16 @@ public class Tower {
     }
 
     /**
-     * Sets the state of the hood. true is closed, false is open.
+     * Sets the state of the hood.
+     * <p>
+     * Values -> Physical state:
+     * <p>
+     * True  -> Closed
+     * <p>
+     * False -> Open
+     * <p>
+     * 
+     * @param state The new state of the hood.
      */
     public void setHood(boolean state) {
         SmartDashboard.putString("Hood", state ? "Closed" : "Open");

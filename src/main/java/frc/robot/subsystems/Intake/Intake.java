@@ -11,49 +11,81 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
-    // Creates solenoids as well, Solenoid objects.
-    Solenoid intake;
-
-    // Creates each motor controller as CANSparkMax objects.
+    // Initializing Motors
     TalonSRX frontRoller = new TalonSRX(IntakeConstants.FrontRollerID);
     TalonSRX leftIndexer = new TalonSRX(IntakeConstants.LeftIndexerID);
     TalonSRX rightIndexer = new TalonSRX(IntakeConstants.RightIndexerID);
 
-    /** Creates a new Intake subsystem */
+    // Initializing Pneumatics
+    Solenoid intake;
+
+    /**
+     * Creates a new Intake subsystem.
+     * <p>
+     * This subsystem is in charge of controlling the motors and solenoids that are used to pick up game objects.
+     * 
+     * @param hub The Pneumatics Hub connected to the robot.
+     */
     public Intake(PneumaticHub hub) {
-        // Creating the solenoid
+        // Creating the solenoid.
         intake = hub.makeSolenoid(IntakeConstants.SolenoidID);
-        // Applying settings to each motor
+
+        // Restoring the factory defaults of each motor.
+        frontRoller.configFactoryDefault();
+        leftIndexer.configFactoryDefault();
+        rightIndexer.configFactoryDefault();
+
+        // Making each motor follow the front roller.
         leftIndexer.follow(frontRoller);
-        leftIndexer.setInverted(false);
         rightIndexer.follow(frontRoller);
 
-        intake.set(true);
+        // Setting the initial state of the intake.
+        intake.set(false);
     }
 
-    /** Sets the speed of the intake. */
+    /**
+     * Sets the speed of the intake motors.
+     * 
+     * @param speed The duty cycle speed of the intake motors.
+     */
     public void setSpeed(double speed) {
-        SmartDashboard.putNumber("Intake Speed", speed * 0.3);
-
-        // Only sets the speed of the front roller because all of the other motors follow it.
-        frontRoller.set(ControlMode.PercentOutput, speed * 0.3);
+        SmartDashboard.putNumber("Intake/Intake Speed", speed * IntakeConstants.maxIntakeSpeed);
+        frontRoller.set(ControlMode.PercentOutput, speed * IntakeConstants.maxIntakeSpeed);
     }
 
-    /** Gets the speed of the intake.  Doesn't use encoders, so very unreliable. */
+    /**
+     * Returns the estimated speed of the intake motors.
+     * 
+     * @return A double representing the speed of the intake motors.
+     */
     public double getSpeed() {
         return frontRoller.getMotorOutputPercent();
     }
 
-    /** Sets the state of the solenoids attached to the intake.  true is open, false is closed. */
+    /**
+     * Sets the state of the solenoids attached to the intake.
+     * <p>
+     * Values -> Physical state:
+     * <p>
+     * True  -> Open
+     * <p>
+     * False -> Closed
+     * <p>
+     * 
+     * @param state The new state of the intake.
+     */
     public void setState(boolean state) {
         SmartDashboard.putString("Intake State", state ? "Open" : "Closed");
 
         intake.set(state);
     }
 
-    /** Gets the state of the solenoids. */
+    /**
+     * Returns the state of the intake.
+     * 
+     * @return The current state of the intake.
+     */
     public boolean getState() {
-        // Only gets the state of one solenoid as they are manipulated together.
         return intake.get();
     }
 }
