@@ -15,7 +15,7 @@ public final class Constants {
         // Other constants
         public static final double deadband = 0.02;
         public static final double maxDriveSpeed = 0.5;
-        public static final double maxTurnSpeed = 0.3;
+        public static final double maxTurnSpeed = 0.5;
         public static final boolean squareInputs = true;
     }
 
@@ -26,13 +26,20 @@ public final class Constants {
         public static final int RightIndexerID = 13;
         public static final int BottomTrackID = 14;
         public static final int SolenoidID = 8;
+        
+        // Max Speeds
+        public static final double maxIntakeSpeed = 0.6;
     }
     
     public class TowerConstants {
         // Motor/Solenoid IDs
-        public static final int LeftTopRollerID = 21;
-        public static final int RightTopRollerID = 22;
-        public static final int BottomRollerID = 23;
+        public static final int LeftLaunchRollerID = 21;
+        public static final int RightLaunchRollerID = 22;
+        public static final int FeedRollerID = 23;
         public static final int SolenoidID = 9;
+
+        // Max Speeds
+        public static final double maxLaunchSpeed = 1;
+        public static final double maxFeedSpeed = 1;
     }
 }
