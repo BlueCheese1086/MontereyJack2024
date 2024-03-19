@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj2.command.Command;
