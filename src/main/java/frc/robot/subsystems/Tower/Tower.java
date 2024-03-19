@@ -49,7 +49,7 @@ public class Tower {
     /**
      * Sets the speed of the launch motors.
      * 
-     * @param speed The duty cycle speed of the launch motors
+     * @param speed The duty cycle speed of the launch motors.
      */
     public void setLaunchSpeed(double speed) {
         SmartDashboard.putNumber("Tower/Launch Speed", speed * TowerConstants.maxLaunchSpeed);
