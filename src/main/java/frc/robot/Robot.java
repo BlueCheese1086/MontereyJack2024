@@ -18,53 +18,53 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * TimedRobot functions, and found a better way to schedule commands.
  */
 public class Robot extends TimedRobot {
-  // Decares the various commands to be used later.
-  private Command autonomousCommand;
-  private Command teleopCommand;
+    // Decares the various commands to be used later.
+    private Command autonomousCommand;
+    private Command teleopCommand;
 
-  /** This command runs once when the robot has just been enabled. */
-  @Override
-  public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our autonomous chooser on the dashboard.
-    RobotContainer robotContainer = new RobotContainer();
-    
-    // Gets the commands for each specific mode from the RobotContainer class.
-    this.autonomousCommand = robotContainer.getAutonomousCommand();
-    this.teleopCommand = robotContainer.getTeleopCommand();
-  }
+    /** This command runs once when the robot has just been enabled. */
+    @Override
+    public void robotInit() {
+        // Instantiate our RobotContainer.  This will perform all our button bindings, and put our autonomous chooser on the dashboard.
+        RobotContainer robotContainer = new RobotContainer();
+        
+        // Gets the commands for each specific mode from the RobotContainer class.
+        this.autonomousCommand = robotContainer.getAutonomousCommand();
+        this.teleopCommand = robotContainer.getTeleopCommand();
+    }
 
-  /**
-   * This function is called every 20 ms, no matter the mode.
-   * This duty cycle can be changed by adding a constructor to this class.
-   */
-  @Override
-  public void robotPeriodic() {
-    // Runs the Scheduler.
-    CommandScheduler.getInstance().run();
-  }
+    /**
+     * This function is called every 20 ms, no matter the mode.
+     * This duty cycle can be changed by adding a constructor to this class.
+     */
+    @Override
+    public void robotPeriodic() {
+        // Runs the Scheduler.
+        CommandScheduler.getInstance().run();
+    }
 
-  /** This command runs once when the robot enters Autonomous mode. */
-  @Override
-  public void autonomousInit() {
-    autonomousCommand.schedule();
-  }
+    /** This command runs once when the robot enters Autonomous mode. */
+    @Override
+    public void autonomousInit() {
+        autonomousCommand.schedule();
+    }
 
-  /** This function is once when the robot exits Autonomous mode. */
-  // This command is not used in the auto-generated file.
-  @Override
-  public void autonomousExit() {
-    autonomousCommand.cancel();
-  }
+    /** This function is once when the robot exits Autonomous mode. */
+    // This command is not used in the auto-generated file.
+    @Override
+    public void autonomousExit() {
+        autonomousCommand.cancel();
+    }
 
-  /** This command runs once when the robot enters Teleop mode. */
-  @Override
-  public void teleopInit() {
-    teleopCommand.schedule();
-  }
+    /** This command runs once when the robot enters Teleop mode. */
+    @Override
+    public void teleopInit() {
+        teleopCommand.schedule();
+    }
 
-  /** This function is once when the robot exits Teleop mode. */
-  @Override
-  public void teleopExit() {
-    teleopCommand.cancel();
-  }
+    /** This function is once when the robot exits Teleop mode. */
+    @Override
+    public void teleopExit() {
+        teleopCommand.cancel();
+    }
 }
