@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -22,59 +23,57 @@ import frc.robot.subsystems.Tower.Commands.*;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // Creates the pneumatics hub
-  private final PneumaticHub hub  = new PneumaticHub(31);
-  
-  // Initializes the subsystems
-  private final Drivetrain drivetrain = new Drivetrain();
-  private final Intake intake = new Intake(hub);
-  private final Tower tower = new Tower(hub);
+    // Creates the pneumatics hub
+    private final PneumaticHub hub  = new PneumaticHub(31);
 
-  // Creates the remote that controls the robot.
-  // Found a new type of XboxController class that makes it a lot easier to make triggers!
-  // It even has all of the functionality from the plain XboxController class!
-  // private final CommandXboxController xbox = new CommandXboxController(0);
-  private final CommandJoystick joystick = new CommandJoystick(0);
+    // Initializes the subsystems
+    private final Drivetrain drivetrain = new Drivetrain();
+    private final Intake intake = new Intake(hub);
+    private final Tower tower = new Tower(hub);
 
-  /** The container for the robot. Contains subsystems, IO devices, and commands. */
-  public RobotContainer() {
-    // Configures the trigger -> command bindings
-    configureBindings();
-  }
+    // Creates the remote that controls the robot.
+    // Found a new type of XboxController class that makes it a lot easier to make triggers!
+    // It even has all of the functionality from the plain XboxController class!
+    private final CommandXboxController xbox = new CommandXboxController(0);
 
-  /** Use this method to define your trigger->command mappings. */
-  private void configureBindings() {
-    // The buttons are bound in groups.  Buttons x and a are the group for the intake, and y and b are the group for the tower.
-    // The later letter toggles the subsystem, and the earlier letter runs the subsystem.
+    /** The container for the robot. Contains subsystems, IO devices, and commands. */
+    public RobotContainer() {
+        // Configures the trigger -> command bindings
+        configureBindings();
+    }
 
-    /**
-     * Y - toggle shooter on/off
-     * A - shoot the ball
-     * X - Run Intake
-     * B - toggle intake
-     */
+    /** Use this method to define your trigger->command mappings. */
+    private void configureBindings() {
+        /*
+         * A - Runs the feed.
+         * B - Opens/closes the intake.
+         * X - Runs the intake.
+         * Y - Toggles the flywheels.
+         * POV Up - Opens shooter (higher shots)
+         * POV Down - Closes shooter (farther shots)
+         * Left Bumper - Run intake/shooter in reverse.
+         */
+        xbox.a().whileTrue(new RunFeed(tower, 1)); // A
+        xbox.b().toggleOnTrue(new SetIntakeState(intake, true)); // B
+        xbox.x().whileTrue(new RunIntake(intake, 1)); // X
+        xbox.y().toggleOnTrue(new RunLaunch(tower, 1)); // Y
+        xbox.povUp().onTrue(new SetHoodState(tower, false)); // POV Up
+        xbox.povDown().onTrue(new SetHoodState(tower, true)); // POV Down
 
-    // joystick.button(2).whileTrue(new RunTower(tower, 1));
+        // The exception to this method is the left bumper, as it runs all of the subsystems in reverse, and opens all of the solenoids.
+        xbox.leftBumper().whileTrue(new SetIntakeState(intake, true)); // Left Bumper
+        xbox.leftBumper().whileTrue(new RunIntake(intake, -1)); // Left Bumper
+        xbox.leftBumper().whileTrue(new RunFeed(tower, -1)); // Left Bumper
+        xbox.leftBumper().whileTrue(new RunLaunch(tower, -1)); // Left Bumper
+    }
 
-    joystick.button(2).toggleOnTrue(new SetIntakeState(intake, true)); // B
-    joystick.button(3).whileTrue(new RunIntake(intake, 1)); // X
-    joystick.button(4).toggleOnTrue(new SetHoodState(tower, true)); // Y
-    joystick.button(1).whileTrue(new RunTower(tower, 1)); // A
+    /** Passes the autonomous command to the {@link Robot} class. */
+    public Command getAutonomousCommand() {
+        return new Autonomous(drivetrain, intake, tower);
+    }
 
-    // The exception to this method is the left bumper, as it runs all of the subsystems in reverse, and opens all of the solenoids.
-    joystick.button(5).whileTrue(new SetIntakeState(intake, true)); // Left Bumper
-    joystick.button(5).whileTrue(new RunIntake(intake, -1));
-    joystick.button(5).whileTrue(new SetHoodState(tower, true));
-    joystick.button(5).whileTrue(new RunTower(tower, -1));
-  }
-
-  /** Passes the autonomous command to the {@link Robot} class. */
-  public Command getAutonomousCommand() {
-    return new Autonomous(drivetrain, intake, tower);
-  }
-
-  /** Passes the teleop command to the {@link Robot} class. */
-  public Command getTeleopCommand() {
-    return new ArcadeDrive(drivetrain, () -> -joystick.getRawAxis(1), () -> joystick.getRawAxis(4));
-  }
+    /** Passes the teleop command to the {@link Robot} class. */
+    public Command getTeleopCommand() {
+        return new ArcadeDrive(drivetrain, () -> -xbox.getRawAxis(1), () -> xbox.getRawAxis(4));
+    }
 }
