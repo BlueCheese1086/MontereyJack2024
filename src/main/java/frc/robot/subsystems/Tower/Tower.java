@@ -10,6 +10,7 @@ package frc.robot.subsystems.Tower;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.PneumaticHub;
@@ -21,11 +22,10 @@ public class Tower {
     // Initializes Pneumatics
     Solenoid hood;
 
-    // Creates motor controllers as TalonFXs and CANSparkMaxes
-    TalonFX leftTopRoller = new TalonFX(TowerConstants.LeftTopRollerID);
-    TalonFX rightTopRoller = new TalonFX(TowerConstants.RightTopRollerID);
-    
-    TalonSRX bottomRoller = new TalonSRX(TowerConstants.BottomRollerID);
+    // Initializes Motors
+    TalonFX leftLaunchMotor = new TalonFX(TowerConstants.LeftLaunchRollerID);
+    TalonFX rightLaunchMotor = new TalonFX(TowerConstants.RightLaunchRollerID);
+    TalonSRX feedMotor = new TalonSRX(TowerConstants.FeedRollerID);
     
     /** Creates a new Tower subsystem */
     public Tower(PneumaticHub hub) {
@@ -33,42 +33,70 @@ public class Tower {
         hood = hub.makeSolenoid(TowerConstants.SolenoidID);
 
         // Applying settings to each motor
-        leftTopRoller.getConfigurator().apply(new TalonFXConfiguration());
-        rightTopRoller.getConfigurator().apply(new TalonFXConfiguration());
-        bottomRoller.configFactoryDefault();
+        leftLaunchMotor.getConfigurator().apply(new TalonFXConfiguration());
+        rightLaunchMotor.getConfigurator().apply(new TalonFXConfiguration());
+        feedMotor.configFactoryDefault();
 
-        rightTopRoller.setInverted(true);
-        leftTopRoller.setInverted(false);
+        // Making the right motor follow the left one.
+        rightLaunchMotor.setControl(new Follower(leftLaunchMotor.getDeviceID(), true));
 
         hood.set(true);
 
         // If the backup motor is in use, uncomment this.
-        //bottomRoller.setInverted(true);
+        //feedMotor.setInverted(true);
     }
 
-    /** Sets the speed of the tower. */
-    public void setSpeed(double speed) {
-        SmartDashboard.putNumber("Tower Speed", speed * 0.6);
-        // leftTopRoller.set(speed * 0.6);
-        // rightTopRoller.set(speed * 0.6);
-        leftTopRoller.set(speed * 0.6);
-        rightTopRoller.set(speed * 0.6);
-        bottomRoller.set(ControlMode.PercentOutput, speed * 0.6);
+    /**
+     * Sets the speed of the launch motors.
+     * 
+     * @param speed The duty cycle speed of the launch motors
+     */
+    public void setLaunchSpeed(double speed) {
+        SmartDashboard.putNumber("Tower/Launch Speed", speed * TowerConstants.maxLaunchSpeed);
+        leftLaunchMotor.set(speed * TowerConstants.maxLaunchSpeed);
     }
 
-    /** Returns the average speed of the motors.  Doesn't use encoders, so very unreliable. */
-    public double getSpeed() {
-        // return (bottomRoller.getMotorOutputPercent() + leftTopRoller.get()) / 2;
-        return (bottomRoller.getMotorOutputPercent() + leftTopRoller.get()) / 2;
+    /**
+     * Sets the speed of the tower.
+     * 
+     * @param speed The duty cycle speed of the tower.
+     */
+    public void setFeedSpeed(double speed) {
+        SmartDashboard.putNumber("Tower/Feed Speed", speed * TowerConstants.maxFeedSpeed);
+        feedMotor.set(ControlMode.PercentOutput, speed * TowerConstants.maxFeedSpeed);
     }
 
-    /** Sets the state of the hood. true is closed, false is open. */
+    /**
+     * Returns the estimated average speed of the launch motors.
+     * 
+     * @return A double representing the speed of the launch motors.
+     */
+    public double getLaunchSpeed() {
+        return (leftLaunchMotor.get() + rightLaunchMotor.get()) / 2;
+    }
+
+    /**
+     * Returns the estimated speed of the feed motor.
+     * 
+     * @return A double representing the speed of the feed motor.
+     */
+    public double getFeedSpeed() {
+        return feedMotor.getMotorOutputPercent();
+    }
+
+    /**
+     * Sets the state of the hood. true is closed, false is open.
+     */
     public void setHood(boolean state) {
         SmartDashboard.putString("Hood", state ? "Closed" : "Open");
         hood.set(state);
     }
 
-    /** Returns the state of the hood. */
+    /**
+     * Returns the state of the hood.
+     * 
+     * @return The current state of the hood.
+     */
     public boolean getHood() {
         return hood.get();
     }

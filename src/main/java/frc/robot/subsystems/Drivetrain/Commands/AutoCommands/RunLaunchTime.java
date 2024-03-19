@@ -3,7 +3,7 @@ package frc.robot.subsystems.Drivetrain.Commands.AutoCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Tower.Tower;
 
-public class RunTowerTime extends Command {
+public class RunLaunchTime extends Command {
     private final Tower tower;
     private final double speed;
     private final double seconds;
@@ -13,7 +13,7 @@ public class RunTowerTime extends Command {
      * Creates a new RunTowerTime
      * This command runs the tower at x speed for y seconds.
      */
-    public RunTowerTime(Tower tower, double speed, double seconds) {
+    public RunLaunchTime(Tower tower, double speed, double seconds) {
         this.tower = tower;
         this.speed = speed;
         this.seconds = seconds;
@@ -28,7 +28,7 @@ public class RunTowerTime extends Command {
     @Override
     /** Runs every cycle.  Contains the code that the command will execute. */
     public void execute() {
-        tower.setSpeed(speed);
+        tower.setLaunchSpeed(speed);
     }
 
     @Override
@@ -40,6 +40,6 @@ public class RunTowerTime extends Command {
     @Override
     /** Runs once when the command finishes. */
     public void end(boolean interrupted) {
-        tower.setSpeed(0);
+        tower.setLaunchSpeed(0);
     }
 }

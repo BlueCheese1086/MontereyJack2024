@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.Drivetrain.Commands;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.subsystems.Drivetrain.Commands.AutoCommands.*;
@@ -21,7 +22,10 @@ public final class Autonomous extends SequentialCommandGroup {
       new RunIntakeTime(intake, 1, 2), // Runs the intake motors at max speed for 2 seconds.
       new SetIntakeState(intake, false), // Sets the Solenoid controlling the intake to false, closing it.
       new SetHoodState(tower, true), // Sets the Solenoid controlling the hood to true, opening it.
-      new RunTowerTime(tower, 1, 3), // Runs the tower motors at max speed for 3 seconds.
+      new ParallelCommandGroup( // Runs the tower motors at max speed for 3 seconds.
+        new RunFeedTime(tower, 1, 3),
+        new RunLaunchTime(tower, 1, 3)
+      ),
       new SetHoodState(tower, false) // Sets the Solenoid controlling the hood to false, closing it.
     );
   }
