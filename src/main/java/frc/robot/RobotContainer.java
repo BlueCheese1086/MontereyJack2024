@@ -48,16 +48,14 @@ public class RobotContainer {
          * B - Opens/closes the intake.
          * X - Runs the intake.
          * Y - Toggles the flywheels.
-         * POV Up - Opens shooter (higher shots)
-         * POV Down - Closes shooter (farther shots)
+         * POV Up - Toggles shooter hood.
          * Left Bumper - Run intake/shooter in reverse.
          */
         xbox.a().whileTrue(new RunFeed(tower, 1)); // A
         xbox.b().toggleOnTrue(new SetIntakeState(intake, true)); // B
         xbox.x().whileTrue(new RunIntake(intake, 1)); // X
         xbox.y().toggleOnTrue(new RunLaunch(tower, 1)); // Y
-        xbox.povUp().onTrue(new SetHoodState(tower, false)); // POV Up
-        xbox.povDown().onTrue(new SetHoodState(tower, true)); // POV Down
+        xbox.povUp().onTrue(new ToggleHoodState(tower)); // POV Up
 
         // The exception to this method is the left bumper, as it runs all of the subsystems in reverse, and opens all of the solenoids.
         xbox.leftBumper().whileTrue(new SetIntakeState(intake, true)); // Left Bumper
