@@ -14,4 +14,9 @@ public class ToggleHoodState extends Command {
     public void initialize() {
         tower.setHood(!tower.getHood());
     }
+
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 }
