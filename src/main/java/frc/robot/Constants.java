@@ -14,8 +14,8 @@ public final class Constants {
 
         // Other constants
         public static final double deadband = 0.02;
-        public static final double maxDriveSpeed = 0.5;
-        public static final double maxTurnSpeed = 0.5;
+        public static final double maxDriveSpeed = 0.6;
+        public static final double maxTurnSpeed = 0.6;
         public static final boolean squareInputs = true;
     }
 
@@ -28,7 +28,7 @@ public final class Constants {
         public static final int SolenoidID = 8;
         
         // Max Speeds
-        public static final double maxIntakeSpeed = 0.4;
+        public static final double maxIntakeSpeed = 0.6;
     }
     
     public class TowerConstants {
