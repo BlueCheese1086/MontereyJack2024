@@ -28,7 +28,7 @@ public final class Constants {
         public static final int SolenoidID = 8;
         
         // Max Speeds
-        public static final double maxIntakeSpeed = 0.6;
+        public static final double maxIntakeSpeed = 0.4;
     }
     
     public class TowerConstants {
